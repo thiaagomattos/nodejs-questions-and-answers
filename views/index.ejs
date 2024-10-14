@@ -16,5 +16,19 @@
     <p>Language: <%= lang %></p>
     <p>Enterprise: <%= enterprise %></p>
     <p>Number of subscribers: <%= subscribers %></p>
+
+
+    <% if(msg == true){ %>
+        <h3>this is an error message</h3>
+    <%} else { %>
+        <h3>no error!</h3>
+    <%}%>
+
+    <% products.forEach(function(product) { %>
+        <hr>
+        <h4><%= product.name %></h4>
+        <h5><%= product.price %></h5>
+    <% }) %>
+
 </body>
 </html>
