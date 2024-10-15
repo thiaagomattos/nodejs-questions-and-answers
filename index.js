@@ -24,7 +24,9 @@ app.use(bodyParser.json());
 
 //rotas
 app.get("/",(req, res) => {
-    Question.findAll({raw: true}).then(questions => {
+    Question.findAll({raw: true, order:[
+        ['id', 'DESC'] // ASC
+    ]}).then(questions => {
         res.render("index",{
             questions: questions
         });
@@ -45,5 +47,18 @@ app.post("/saveask",(req,res) => {
         res.redirect("/");
     })
 });
+
+app.get("/question/:id",(req,res) => {
+    var id = req.params.id;
+    Question.findOne({
+        where: {id: id}
+    }).then(question => {
+        if(question != undefined){
+            res.render("question");
+        }else{
+            res.redirect("/");
+        }
+    })
+})
 
 app.listen(8080,()=>{console.log("app running!");});
