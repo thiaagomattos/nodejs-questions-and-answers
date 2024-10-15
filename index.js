@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const connection = require("./database/database");
-const questionModel = require("./database/Question");
+const Question = require("./database/Question");
 //Database
 
 connection
@@ -24,7 +24,11 @@ app.use(bodyParser.json());
 
 //rotas
 app.get("/",(req, res) => {
-    res.render("index");
+    Question.findAll({raw: true}).then(questions => {
+        res.render("index",{
+            questions: questions
+        });
+    })
 });
 
 app.get("/ask",(req, res) => {
@@ -34,7 +38,12 @@ app.get("/ask",(req, res) => {
 app.post("/saveask",(req,res) => {
     var title = req.body.title;
     var description = req.body.description;
-    res.send("Formulary Received! Title: " + title + " " + " description: " + description);
+    Question.create({
+        title: title,
+        description: description
+    }).then(() => {
+        res.redirect("/");
+    })
 });
 
 app.listen(8080,()=>{console.log("app running!");});
